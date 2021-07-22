@@ -7,13 +7,17 @@ import fetchColorServices from "../services/fetchColorService";
 import userEvent from "@testing-library/user-event";
 jest.mock("../services/fetchColorService");
 
-const testColor = {
-  color: "blue",
-  code: { hex: "#7fffd4" },
-  id: 1,
-};
+const testColor = [
+  {
+    color: "blue",
+    code: { hex: "#7fffd4" },
+    id: 1,
+  },
+];
 
 test("Renders without errors", () => {
+  fetchColorServices.mockResolvedValueOnce(testColor);
+
   render(<BubblePage />);
 });
 
@@ -22,9 +26,9 @@ test("Renders appropriate number of colors passed in through mock", async () => 
   fetchColorServices.mockResolvedValueOnce(testColor);
 
   render(<BubblePage />);
-  const colors = screen.getAllByTestId("color");
 
   await waitFor(() => {
+    const colors = screen.getAllByTestId("color");
     expect(colors).toHaveLength(1);
   });
 });

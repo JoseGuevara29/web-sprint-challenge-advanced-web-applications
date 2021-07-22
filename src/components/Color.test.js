@@ -16,14 +16,20 @@ test("Renders without errors with blank color passed into component", () => {
 
 test("Renders the color passed into component", () => {
   render(<Color color={testColor} />);
-  const color = screen.queryAllByTestId("color");
+  const color = screen.getByTestId("color");
   expect(color).toBeInTheDocument();
 });
 
 test("Executes handleDelete and toggleEdit property when the 'x' icon is clicked", () => {
   const handleDelete = jest.fn();
   const toggleEdit = jest.fn();
-  render(<Color color={testColor} />);
+  render(
+    <Color
+      deleteColor={handleDelete}
+      toggleEdit={toggleEdit}
+      color={testColor}
+    />
+  );
   const deleteKey = screen.getByTestId("delete");
   userEvent.click(deleteKey);
   expect(handleDelete).toBeCalled();
@@ -33,7 +39,13 @@ test("Executes handleDelete and toggleEdit property when the 'x' icon is clicked
 test("Executes setEditColor and toggleEdit property when color div is clicked", () => {
   const setEditColor = jest.fn();
   const toggleEdit = jest.fn();
-  render(<Color color={testColor} />);
+  render(
+    <Color
+      setEditColor={setEditColor}
+      toggleEdit={toggleEdit}
+      color={testColor}
+    />
+  );
   const colorKey = screen.getByTestId("color");
   userEvent.click(colorKey);
   expect(setEditColor).toBeCalled();

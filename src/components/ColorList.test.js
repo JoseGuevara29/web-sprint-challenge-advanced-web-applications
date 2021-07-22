@@ -11,21 +11,22 @@ const testColor = {
   code: { hex: "#7fffd4" },
   id: 1,
 };
-
 const noColor = [];
 
 test("Renders an empty list of colors without errors", () => {
-  render(<ColorList color={noColor} />);
+  render(<ColorList colors={noColor} />);
 });
 
 test("Renders a list of colors without errors", () => {
-  render(<ColorList color={testColor} />);
+  render(<ColorList colors={[testColor]} />);
 });
 
 test("Renders the EditForm when editing = true and does not render EditForm when editing = false", () => {
-  const toggleEdit = jest.fn();
-  render(<ColorList color={testColor} />);
-  let editing = screen.queryByTestId("color");
-  userEvent.click(editing);
-  expect(toggleEdit).toBeCalled();
+  const { rerender } = render(
+    <ColorList editing={true} colors={[testColor]} />
+  );
+  expect(screen.getByTestId(/edit_menu/i)).toBeInTheDocument();
+
+  rerender(<ColorList editing={false} colors={[testColor]} />);
+  expect(screen.queryByTestId(/edit_menu/i)).not.toBeInTheDocument();
 });
